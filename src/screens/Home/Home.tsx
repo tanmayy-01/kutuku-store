@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -29,9 +29,12 @@ const Home = ({ navigation }: Props) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [filteredProducts, setFilterdProducts] = useState(products);
+  const [filteredProducts, setFilterdProducts] = useState<Product[]>([]);
   const [openModel, setOpenModel] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product>();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [editTitle, setEditTitle] = useState<string>('');
+  const [editDesc, setEditDesc] = useState<string>('');
+  const [editPrice, setEditPrice] = useState<string>('');
 
   useEffect(() => {
     fetchProducts();
@@ -44,6 +47,7 @@ const Home = ({ navigation }: Props) => {
       const data = await getProducts();
       console.log('Fetched products data:', data);
       setProducts(data);
+      setFilterdProducts(data);
     } catch (err: any) {
       console.error('Failed to fetch products:', err);
       setError(err?.message || 'Something went wrong while fetching products');
@@ -71,13 +75,11 @@ const Home = ({ navigation }: Props) => {
 
   const handleDelete = (id: number) => {
     console.log('ID:', id);
-    const updatedProductList = filteredProducts.filter(fp => fp.id != id);
-
-    setFilterdProducts(updatedProductList);
-    // console.log(updatedProductList)
+    setProducts(prev => prev.filter(fp => fp.id !== id));
+    setFilterdProducts(prev => prev.filter(fp => fp.id !== id));
   };
+
   const handleDeleteProduct = (id: number) => {
-    //
     Alert.alert('Delete Product', 'Are you sure you want to remove product?', [
       { text: 'Cancel', style: 'cancel' },
       {
@@ -90,7 +92,42 @@ const Home = ({ navigation }: Props) => {
 
   const handleEditProduct = (item: Product) => {
     setSelectedProduct(item);
+    setEditTitle(item.title);
+    setEditDesc(item.description);
+    setEditPrice(item.price.toString());
     setOpenModel(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!selectedProduct) return;
+
+    if (!editTitle.trim()) {
+      Alert.alert('Validation Error', 'Product title cannot be empty.');
+      return;
+    }
+
+    const parsedPrice = parseFloat(editPrice);
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      Alert.alert('Validation Error', 'Please enter a valid price.');
+      return;
+    }
+
+    const updatedProduct: Product = {
+      ...selectedProduct,
+      title: editTitle.trim(),
+      description: editDesc.trim(),
+      price: parsedPrice,
+    };
+
+    setProducts(prevProducts =>
+      prevProducts.map(p => (p.id === selectedProduct.id ? updatedProduct : p)),
+    );
+    setFilterdProducts(prevFiltered =>
+      prevFiltered.map(p => (p.id === selectedProduct.id ? updatedProduct : p)),
+    );
+
+    setOpenModel(false);
+    setSelectedProduct(null);
   };
 
   const handleWishlistHeaderPress = () => {
@@ -273,114 +310,76 @@ const Home = ({ navigation }: Props) => {
 
       <Modal
         visible={openModel}
-        style={{
-          flex: 1,
-
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setOpenModel(false)}
       >
-        <View
-          style={{
-            flex: 1,
-            // backgroundColor: 'pink',
-            justifyContent: 'center',
-            alignItems: 'center',
-          
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '800',
-            }}
-          >
-            Edit Product.
-          </Text>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Edit Product</Text>
+              <TouchableOpacity
+                onPress={() => setOpenModel(false)}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="close" size={24} color="#8A8FA3" />
+              </TouchableOpacity>
+            </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent:'space-between',
-              width:200,
-              alignItems:'center'
-            }}
-          >
-            <Text >Title: </Text>
-            <TextInput
-              value={selectedProduct?.title}
-              style={{
-                borderWidth: 1,
-                margin: 10,
-                color: '#000',
-                borderRadius:10
-              }}
-              
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent:'space-between',
-              width:200,
-              alignItems:'center'
-            }}
-          >
-            <Text style={{  }}>Title: </Text>
-            <TextInput
-              value={selectedProduct?.title}
-              style={{
-                borderWidth: 1,
-                margin: 10,
-                color: '#000',
-                borderRadius:10
-              }}
-              
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent:'space-between',
-              width:200,
-              alignItems:'center'
-            }}
-          >
-            <Text style={{  }}>Title: </Text>
-            <TextInput
-              value={selectedProduct?.title}
-              style={{
-                borderWidth: 1,
-                margin: 10,
-                color: '#000',
-                borderRadius:10
-              }}
-              
-            />
-          </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Title</Text>
+              <TextInput
+                value={editTitle}
+                onChangeText={setEditTitle}
+                placeholder="Product title"
+                placeholderTextColor="#A0A5BD"
+                style={styles.inputField}
+              />
+            </View>
 
-          <TouchableOpacity
-            style={{
-              backgroundColor: 'blue',
-              width: 200,
-              height: 40,
-              justifyContent: 'center',
-              marginTop: 20,
-              borderRadius: 10,
-            }}
-            onPress={() => setOpenModel(false)}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 18,
-                fontWeight: '400',
-                textAlign: 'center',
-              }}
-            >
-              Save
-            </Text>
-          </TouchableOpacity>
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Description</Text>
+              <TextInput
+                value={editDesc}
+                onChangeText={setEditDesc}
+                placeholder="Product description"
+                placeholderTextColor="#A0A5BD"
+                multiline
+                numberOfLines={3}
+                style={[styles.inputField, styles.inputFieldMultiline]}
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Price ($)</Text>
+              <TextInput
+                value={editPrice}
+                onChangeText={setEditPrice}
+                placeholder="0.00"
+                placeholderTextColor="#A0A5BD"
+                keyboardType="decimal-pad"
+                style={styles.inputField}
+              />
+            </View>
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.modalCancelBtn}
+                onPress={() => setOpenModel(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.modalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.modalSaveBtn}
+                onPress={handleSaveEdit}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.modalSaveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </Modal>
     </SafeAreaView>
