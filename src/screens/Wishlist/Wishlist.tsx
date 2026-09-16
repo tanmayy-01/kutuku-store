@@ -31,6 +31,10 @@ const Wishlist = ({ navigation }: Props) => {
     dispatch(removeFromWishlist(id));
   };
 
+  const handleProductPress = (productId: number) => {
+    navigation.navigate('ProductDetails', { productId });
+  };
+
   const handleClearAll = () => {
     Alert.alert(
       'Clear Wishlist',
@@ -48,7 +52,11 @@ const Wishlist = ({ navigation }: Props) => {
 
   const renderProductItem = ({ item }: { item: Product }) => {
     return (
-      <View style={styles.productCard}>
+      <TouchableOpacity
+        style={styles.productCard}
+        activeOpacity={0.88}
+        onPress={() => handleProductPress(item.id)}
+      >
         <View style={styles.imageContainer}>
           <Image source={{ uri: item.image }} style={styles.productImage} />
 
@@ -74,7 +82,7 @@ const Wishlist = ({ navigation }: Props) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

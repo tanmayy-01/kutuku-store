@@ -22,3 +22,29 @@ export interface Product {
     count: number;
   };
 }
+
+export interface CartProduct {
+  id?: number;
+  productId?: number;
+  quantity?: number;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface AddToCartPayload {
+  userId: number;
+  products: {
+    id: number;
+    quantity?: number;
+  }[];
+  date?: string;
+}
+
+export interface CartResponse {
+  id: number;
+  userId: number;
+  products: CartProduct[];
+}
