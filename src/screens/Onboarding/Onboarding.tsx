@@ -41,7 +41,7 @@ const Onboarding = ({ navigation }: Props) => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.content}>
-          {/* Rounded Card Image */}
+          {/* Card Image */}
           <View style={styles.imageCardWrapper}>
             <Image
               source={require('../../assets/images/onboarding1.jpg')}

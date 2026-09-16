@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
+import { useAppDispatch, useAppSelector, toggleWishlist } from '../../redux';
 import { getProducts } from '../../services/productService';
 import { Product } from '../../types';
 import { styles } from './Home.styles';
@@ -19,19 +20,19 @@ type Props = {
 };
 
 const Home = ({ navigation }: Props) => {
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [cartCount, setCartCount] = useState<number>(2);
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [cartCount, setCartCount] = useState<number>(0);
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
-   
-    
     try {
       setLoading(true);
       setError(null);
@@ -46,34 +47,33 @@ const Home = ({ navigation }: Props) => {
     }
   };
 
+  const handleWishlistHeaderPress = () => {
+    navigation.navigate('Wishlist');
+  };
+
   const handleCartPress = () => {
     console.log('Cart icon pressed');
   };
 
-  const toggleWishlist = (productId: number) => {
-    setWishlist((prev) => {
-      const isAlreadyInWishlist = prev.includes(productId);
-      if (isAlreadyInWishlist) {
-        return prev.filter((id) => id !== productId);
-      } else {
-        return [...prev, productId];
-      }
-    });
+  const handleToggleWishlist = (product: Product) => {
+    dispatch(toggleWishlist(product));
   };
 
   const renderProductItem = ({ item }: { item: Product }) => {
-    const isWishlisted = wishlist.includes(item.id);
+    const isWishlisted = wishlistItems.some(
+      (wishlistItem) => wishlistItem.id === item.id
+    );
 
     return (
       <View style={styles.productCard}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: item.image }} style={styles.productImage} />
-          
-          {/* Add to Wishlist Button */}
+
+          {/* Wishlist Button on Product */}
           <TouchableOpacity
             style={styles.wishlistButton}
             activeOpacity={0.7}
-            onPress={() => toggleWishlist(item.id)}
+            onPress={() => handleToggleWishlist(item)}
           >
             <Ionicons
               name={isWishlisted ? 'heart' : 'heart-outline'}
@@ -103,25 +103,46 @@ const Home = ({ navigation }: Props) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Top Header with Ionicons Cart Icon */}
+      {/* Top Header with Wishlist and Cart Icons */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.headerSubtitle}>Discover</Text>
           <Text style={styles.headerTitle}>Latest Products</Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.cartButton}
-          activeOpacity={0.7}
-          onPress={handleCartPress}
-        >
-          <Ionicons name="cart-outline" size={24} color="#1E202B" />
-          {cartCount > 0 && (
-            <View style={styles.cartBadge}>
-              <Text style={styles.cartBadgeText}>{cartCount}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          {/* Wishlist Button in Header */}
+          <TouchableOpacity
+            style={styles.iconButton}
+            activeOpacity={0.7}
+            onPress={handleWishlistHeaderPress}
+          >
+            <Ionicons
+              name={wishlistItems.length > 0 ? 'heart' : 'heart-outline'}
+              size={22}
+              color={wishlistItems.length > 0 ? '#E53935' : '#1E202B'}
+            />
+            {wishlistItems.length > 0 && (
+              <View style={[styles.badge, styles.wishlistBadge]}>
+                <Text style={styles.badgeText}>{wishlistItems.length}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+
+          {/* Cart Button in Header */}
+          <TouchableOpacity
+            style={styles.iconButton}
+            activeOpacity={0.7}
+            onPress={handleCartPress}
+          >
+            <Ionicons name="cart-outline" size={23} color="#1E202B" />
+            {cartCount > 0 && (
+              <View style={[styles.badge, styles.cartBadge]}>
+                <Text style={styles.badgeText}>{cartCount}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
 
       {loading ? (
