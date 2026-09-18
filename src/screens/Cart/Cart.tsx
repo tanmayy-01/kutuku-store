@@ -15,6 +15,7 @@ import { getCartById } from '../../services/cartService';
 import { getProductById } from '../../services/productService';
 import { CartResponse, CartProduct, Product } from '../../types';
 import { styles } from './Cart.styles';
+import { SCREEN_NAME } from '../../constants/screenNames';
 
 type Props = {
   navigation: any;
@@ -88,7 +89,7 @@ const Cart = ({ navigation }: Props) => {
         style={styles.cartItemCard}
         activeOpacity={0.85}
         onPress={() =>
-          navigation.navigate('ProductDetails', {
+          navigation.navigate(SCREEN_NAME.PRODUCT_DETAILS, {
             productId: item.product.id,
           })
         }
@@ -173,7 +174,7 @@ const Cart = ({ navigation }: Props) => {
           <TouchableOpacity
             style={styles.exploreButton}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate(SCREEN_NAME.HOME)}
           >
             <Text style={styles.exploreButtonText}>Explore Products</Text>
           </TouchableOpacity>

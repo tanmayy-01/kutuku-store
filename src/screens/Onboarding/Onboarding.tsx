@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './Onboarding.styles';
+import { SCREEN_NAME } from '../../constants/screenNames';
 
 type Props = {
   navigation: any;
@@ -33,7 +34,7 @@ const Onboarding = ({ navigation }: Props) => {
   );
 
   const handleGoToHome = () => {
-    navigation.navigate('Home');
+    navigation.navigate(SCREEN_NAME.HOME);
   };
 
   return (

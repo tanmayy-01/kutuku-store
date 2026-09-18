@@ -15,6 +15,7 @@ import { addToCartApi } from '../../services/cartService';
 import { Product } from '../../types';
 import ProductDetailsContent from '../../components/ProductDetailsContent';
 import { styles } from './ProductDetails.styles';
+import { SCREEN_NAME } from '../../constants/screenNames';
 
 type Props = {
   navigation: any;
@@ -95,7 +96,7 @@ const ProductDetails = ({ navigation, route }: Props) => {
           { text: 'Continue Shopping', style: 'cancel' },
           {
             text: 'View Cart',
-            onPress: () => navigation.navigate('Cart'),
+            onPress: () => navigation.navigate(SCREEN_NAME.CART),
           },
         ]
       );

@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
 import { styles } from './Splash.styles';
+import { SCREEN_NAME } from '../../constants/screenNames';
 
 type Props = {
   navigation: any;
@@ -9,7 +10,7 @@ type Props = {
 const Splash = ({ navigation }: Props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Onboarding');
+      navigation.replace(SCREEN_NAME.ONBOARDING);
     }, 2000);
 
     return () => clearTimeout(timer);

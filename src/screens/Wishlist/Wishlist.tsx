@@ -18,6 +18,7 @@ import {
 } from '../../redux';
 import { Product } from '../../types';
 import { styles } from './Wishlist.styles';
+import { SCREEN_NAME } from '../../constants/screenNames';
 
 type Props = {
   navigation: any;
@@ -32,7 +33,7 @@ const Wishlist = ({ navigation }: Props) => {
   };
 
   const handleProductPress = (productId: number) => {
-    navigation.navigate('ProductDetails', { productId });
+    navigation.navigate(SCREEN_NAME.PRODUCT_DETAILS, { productId });
   };
 
   const handleClearAll = () => {
@@ -128,7 +129,7 @@ const Wishlist = ({ navigation }: Props) => {
           <TouchableOpacity
             style={styles.exploreButton}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate(SCREEN_NAME.HOME)}
           >
             <Text style={styles.exploreButtonText}>Explore Products</Text>
           </TouchableOpacity>

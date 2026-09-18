@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector, toggleWishlist } from '../../redux';
 import { getProducts } from '../../services/productService';
 import { Product } from '../../types';
 import { styles } from './Home.styles';
+import { SCREEN_NAME } from '../../constants/screenNames';
 
 type Props = {
   navigation: any;
@@ -131,15 +132,15 @@ const Home = ({ navigation }: Props) => {
   };
 
   const handleWishlistHeaderPress = () => {
-    navigation.navigate('Wishlist');
+    navigation.navigate(SCREEN_NAME.WISHLIST);
   };
 
   const handleCartPress = () => {
-    navigation.navigate('Cart');
+    navigation.navigate(SCREEN_NAME.CART);
   };
 
   const handleProductPress = (productId: number) => {
-    navigation.navigate('ProductDetails', { productId });
+    navigation.navigate(SCREEN_NAME.PRODUCT_DETAILS, { productId });
   };
 
   const handleToggleWishlist = (product: Product) => {
