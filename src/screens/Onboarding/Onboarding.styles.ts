@@ -1,15 +1,16 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { COLORS, FONT_SIZE } from '../../constants';
 
 const { height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 24,
@@ -23,8 +24,8 @@ export const styles = StyleSheet.create({
     borderRadius: 36,
     overflow: 'hidden',
     marginTop: 8,
-    backgroundColor: '#F7F7FA',
-    shadowColor: '#000',
+    backgroundColor: COLORS.cardBackground,
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -44,16 +45,16 @@ export const styles = StyleSheet.create({
     marginTop: 28,
   },
   title: {
-    fontSize: 24,
+    fontSize: FONT_SIZE.heading,
     fontWeight: '700',
-    color: '#1E202B',
+    color: COLORS.textPrimary,
     textAlign: 'center',
     lineHeight: 32,
     letterSpacing: -0.3,
   },
   description: {
-    fontSize: 14,
-    color: '#9E9EA7',
+    fontSize: FONT_SIZE.body,
+    color: COLORS.textMuted,
     textAlign: 'center',
     marginTop: 14,
     lineHeight: 22,
@@ -64,12 +65,12 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   primaryButton: {
-    backgroundColor: '#5041BC',
+    backgroundColor: COLORS.primary,
     height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#5041BC',
+    shadowColor: COLORS.primary,
     shadowOffset: {
       width: 0,
       height: 6,
@@ -79,8 +80,8 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   primaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: COLORS.white,
+    fontSize: FONT_SIZE.lg,
     fontWeight: '600',
     letterSpacing: 0.2,
   },

@@ -13,7 +13,7 @@ import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { getProductById } from '../../services/productService';
 import { CartProduct, Product } from '../../types';
 import { styles } from './Cart.styles';
-import { SCREEN_NAME } from '../../constants/screenNames';
+import { SCREEN_NAME, COLORS } from '../../constants';
 import { useCart } from '../../hooks/useCart';
 
 type Props = {
@@ -30,12 +30,11 @@ const Cart = ({ navigation }: Props) => {
   const [cartItems, setCartItems] = useState<PopulatedCartItem[]>([]);
 
   useEffect(() => {
-    if(cart?.products && cart.products.length > 0) fetchCartDetails();
+    if (cart?.products && cart.products.length > 0) fetchCartDetails();
   }, [cart]);
 
   const fetchCartDetails = async () => {
     try {
-
       if (cart?.products && cart.products.length > 0) {
         const itemPromises = cart.products.map(
           async (item: CartProduct) => {
@@ -55,7 +54,7 @@ const Cart = ({ navigation }: Props) => {
       }
     } catch (err: any) {
       console.error('Failed to fetch cart:', err);
-    } 
+    }
   };
 
   const calculateTotal = (): number => {
@@ -111,10 +110,10 @@ const Cart = ({ navigation }: Props) => {
     );
   };
 
-  if (isLoading || cartItems.length == 0) {
+  if (isLoading || cartItems.length === 0) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#5041BC" />
+        <ActivityIndicator size="large" color={COLORS.primary} />
         <Text style={styles.loadingText}>Loading cart from API...</Text>
       </View>
     );
@@ -123,7 +122,7 @@ const Cart = ({ navigation }: Props) => {
   if (isError) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>{error.message}</Text>
+        <Text style={styles.errorText}>{error?.message}</Text>
       </View>
     );
   }
@@ -138,7 +137,7 @@ const Cart = ({ navigation }: Props) => {
             activeOpacity={0.7}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={22} color="#1E202B" />
+            <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>My Cart</Text>
         </View>
@@ -153,7 +152,7 @@ const Cart = ({ navigation }: Props) => {
       {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <View style={styles.emptyIconCircle}>
-            <Ionicons name="cart-outline" size={44} color="#5041BC" />
+            <Ionicons name="cart-outline" size={44} color={COLORS.primary} />
           </View>
           <Text style={styles.emptyTitle}>Your Cart is Empty</Text>
           <Text style={styles.emptySubtitle}>

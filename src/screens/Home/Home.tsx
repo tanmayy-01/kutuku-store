@@ -14,7 +14,7 @@ import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { useAppDispatch, useAppSelector, toggleWishlist } from '../../redux';
 import { Product } from '../../types';
 import { styles } from './Home.styles';
-import { SCREEN_NAME } from '../../constants/screenNames';
+import { SCREEN_NAME, COLORS } from '../../constants';
 import { useProducts } from '../../hooks/useProducts';
 
 type Props = {
@@ -42,9 +42,8 @@ const Home = ({ navigation }: Props) => {
     }
   }, [productsData, isLoading]);
 
-
   const handleSearch = (text: string) => {
-    setSearchText(text)
+    setSearchText(text);
     if (text.trim() === '') {
       setFilterdProducts(products);
       return;
@@ -157,7 +156,7 @@ const Home = ({ navigation }: Props) => {
             <Ionicons
               name={isWishlisted ? 'heart' : 'heart-outline'}
               size={18}
-              color={isWishlisted ? '#E53935' : '#8A8FA3'}
+              color={isWishlisted ? COLORS.error : COLORS.textSecondary}
             />
           </TouchableOpacity>
         </View>
@@ -177,13 +176,7 @@ const Home = ({ navigation }: Props) => {
             </View>
           </View>
 
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
+          <View style={styles.actionRow}>
             <TouchableOpacity
               onPress={() => handleDeleteProduct(item.id)}
               style={{ marginTop: 10 }}
@@ -191,40 +184,40 @@ const Home = ({ navigation }: Props) => {
               <Ionicons
                 name={'bag-remove-outline'}
                 size={25}
-                color={'#E53935'}
+                color={COLORS.error}
               />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleEditProduct(item)}
               style={{ marginTop: 10 }}
             >
-              <Ionicons name={'pencil'} size={25} color={'green'} />
+              <Ionicons name={'pencil'} size={25} color={COLORS.success} />
             </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>
     );
   };
+
   if (isLoading || (filteredProducts.length <= 0 && searchText.length <= 0)) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#5041BC" />
+        <ActivityIndicator size="large" color={COLORS.primary} />
         <Text style={styles.loadingText}>Loading products...</Text>
       </View>
     );
   }
+
   if (isError) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.loadingText}>{error.message || "Error while Fetching Product List"}</Text>
+        <Text style={styles.loadingText}>{error?.message || 'Error while Fetching Product List'}</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-     
-
       {/* Top Header with Wishlist and Cart Icons */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -242,7 +235,7 @@ const Home = ({ navigation }: Props) => {
             <Ionicons
               name={wishlistItems.length > 0 ? 'heart' : 'heart-outline'}
               size={22}
-              color={wishlistItems.length > 0 ? '#E53935' : '#1E202B'}
+              color={wishlistItems.length > 0 ? COLORS.error : COLORS.textPrimary}
             />
             {wishlistItems.length > 0 && (
               <View style={[styles.badge, styles.wishlistBadge]}>
@@ -257,36 +250,22 @@ const Home = ({ navigation }: Props) => {
             activeOpacity={0.7}
             onPress={handleCartPress}
           >
-            <Ionicons name="cart-outline" size={23} color="#1E202B" />
+            <Ionicons name="cart-outline" size={23} color={COLORS.textPrimary} />
           </TouchableOpacity>
         </View>
       </View>
 
       <>
         <TextInput
-          style={{
-            width: '80%',
-            height: 40,
-            borderWidth: 1,
-            margin: 25,
-            borderRadius: 10,
-            paddingHorizontal: 5,
-            color: '#000',
-          }}
+          style={styles.searchInput}
           placeholder="Search Products.."
-          placeholderTextColor={'#000'}
+          placeholderTextColor={COLORS.textPrimary}
           onChangeText={handleSearch}
           value={searchText}
         />
 
         <View>
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: '200',
-              textAlign: 'center',
-            }}
-          >
+          <Text style={styles.countText}>
             Count: {filteredProducts.length}
           </Text>
         </View>
@@ -315,7 +294,7 @@ const Home = ({ navigation }: Props) => {
                 onPress={() => setOpenModel(false)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="close" size={24} color="#8A8FA3" />
+                <Ionicons name="close" size={24} color={COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -325,7 +304,7 @@ const Home = ({ navigation }: Props) => {
                 value={editTitle}
                 onChangeText={setEditTitle}
                 placeholder="Product title"
-                placeholderTextColor="#A0A5BD"
+                placeholderTextColor={COLORS.placeholder}
                 style={styles.inputField}
               />
             </View>
@@ -336,7 +315,7 @@ const Home = ({ navigation }: Props) => {
                 value={editDesc}
                 onChangeText={setEditDesc}
                 placeholder="Product description"
-                placeholderTextColor="#A0A5BD"
+                placeholderTextColor={COLORS.placeholder}
                 multiline
                 numberOfLines={3}
                 style={[styles.inputField, styles.inputFieldMultiline]}
@@ -349,7 +328,7 @@ const Home = ({ navigation }: Props) => {
                 value={editPrice}
                 onChangeText={setEditPrice}
                 placeholder="0.00"
-                placeholderTextColor="#A0A5BD"
+                placeholderTextColor={COLORS.placeholder}
                 keyboardType="decimal-pad"
                 style={styles.inputField}
               />

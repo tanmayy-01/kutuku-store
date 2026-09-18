@@ -16,7 +16,7 @@ import {
 } from '../../redux';
 import { Product } from '../../types';
 import { styles } from './Wishlist.styles';
-import { SCREEN_NAME } from '../../constants/screenNames';
+import { SCREEN_NAME, COLORS } from '../../constants';
 
 type Props = {
   navigation: any;
@@ -65,7 +65,7 @@ const Wishlist = ({ navigation }: Props) => {
             activeOpacity={0.7}
             onPress={() => handleRemoveItem(item.id)}
           >
-            <Ionicons name="heart" size={18} color="#E53935" />
+            <Ionicons name="heart" size={18} color={COLORS.error} />
           </TouchableOpacity>
         </View>
 
@@ -95,7 +95,7 @@ const Wishlist = ({ navigation }: Props) => {
             activeOpacity={0.7}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={22} color="#1E202B" />
+            <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>My Wishlist</Text>
         </View>
@@ -116,7 +116,7 @@ const Wishlist = ({ navigation }: Props) => {
       {wishlistItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <View style={styles.emptyIconCircle}>
-            <Ionicons name="heart-outline" size={44} color="#5041BC" />
+            <Ionicons name="heart-outline" size={44} color={COLORS.primary} />
           </View>
           <Text style={styles.emptyTitle}>Your Wishlist is Empty</Text>
           <Text style={styles.emptySubtitle}>

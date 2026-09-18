@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { COLORS, FONT_SIZE } from '../../constants';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: COLORS.background,
   },
   header: {
     paddingHorizontal: 16,
@@ -12,9 +13,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0EFF5',
+    borderBottomColor: COLORS.border,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -24,15 +25,15 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F7F7FA',
+    backgroundColor: COLORS.cardBackground,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: FONT_SIZE.xl,
     fontWeight: '700',
-    color: '#1E202B',
+    color: COLORS.textPrimary,
   },
   headerRight: {
     flexDirection: 'row',
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F7F7FA',
+    backgroundColor: COLORS.cardBackground,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -54,24 +55,24 @@ export const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 12,
-    fontSize: 14,
-    color: '#8A8FA3',
+    fontSize: FONT_SIZE.body,
+    color: COLORS.textSecondary,
   },
   errorText: {
-    fontSize: 14,
-    color: '#E53935',
+    fontSize: FONT_SIZE.body,
+    color: COLORS.error,
     textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: '#5041BC',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: FONT_SIZE.body,
   },
 });

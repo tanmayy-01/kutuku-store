@@ -11,7 +11,7 @@ import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { useAppDispatch, useAppSelector, toggleWishlist } from '../../redux';
 import ProductDetailsContent from '../../components/ProductDetailsContent';
 import { styles } from './ProductDetails.styles';
-import { SCREEN_NAME } from '../../constants/screenNames';
+import { SCREEN_NAME, COLORS } from '../../constants';
 import { useSingleProduct } from '../../hooks/useSingleProduct';
 import { useAddToCart } from '../../hooks/useAddToCart';
 
@@ -101,7 +101,7 @@ const ProductDetails = ({ navigation, route }: Props) => {
   if (isLoading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#5041BC" />
+        <ActivityIndicator size="large" color={COLORS.primary} />
         <Text style={styles.loadingText}>Loading details...</Text>
       </View>
     );
@@ -127,7 +127,7 @@ const ProductDetails = ({ navigation, route }: Props) => {
             activeOpacity={0.7}
             onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back" size={22} color="#1E202B" />
+            <Ionicons name="arrow-back" size={22} color={COLORS.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Product Details</Text>
         </View>
@@ -142,7 +142,7 @@ const ProductDetails = ({ navigation, route }: Props) => {
               <Ionicons
                 name={isWishlisted ? 'heart' : 'heart-outline'}
                 size={22}
-                color={isWishlisted ? '#E53935' : '#1E202B'}
+                color={isWishlisted ? COLORS.error : COLORS.textPrimary}
               />
             </TouchableOpacity>
           </View>

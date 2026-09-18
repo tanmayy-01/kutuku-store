@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { Product } from '../types';
+import { COLORS, FONT_SIZE } from '../constants';
 
 const { height } = Dimensions.get('window');
 
@@ -53,7 +54,7 @@ export const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({
             <Ionicons
               name={isWishlisted ? 'heart' : 'heart-outline'}
               size={22}
-              color={isWishlisted ? '#E53935' : '#1E202B'}
+              color={isWishlisted ? COLORS.error : COLORS.textPrimary}
             />
           </TouchableOpacity>
         </View>
@@ -67,7 +68,7 @@ export const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({
               </Text>
             </View>
             <View style={styles.ratingBadge}>
-              <Ionicons name="star" size={14} color="#F59E0B" />
+              <Ionicons name="star" size={14} color={COLORS.star} />
               <Text style={styles.ratingText}>
                 {product.rating?.rate} ({product.rating?.count} reviews)
               </Text>
@@ -104,7 +105,7 @@ export const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({
             <Ionicons
               name="remove"
               size={18}
-              color={quantity <= 1 ? '#C4C4D0' : '#1E202B'}
+              color={quantity <= 1 ? COLORS.disabled : COLORS.textPrimary}
             />
           </TouchableOpacity>
 
@@ -115,7 +116,7 @@ export const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({
             onPress={onIncreaseQuantity}
             activeOpacity={0.7}
           >
-            <Ionicons name="add" size={18} color="#1E202B" />
+            <Ionicons name="add" size={18} color={COLORS.textPrimary} />
           </TouchableOpacity>
         </View>
 
@@ -125,7 +126,7 @@ export const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({
           activeOpacity={0.85}
           onPress={onAddToCart}
         >
-          <Ionicons name="cart" size={20} color="#FFFFFF" style={styles.cartIcon} />
+          <Ionicons name="cart" size={20} color={COLORS.white} style={styles.cartIcon} />
           <Text style={styles.addToCartText}>
             Add to Cart • ${(product.price * quantity).toFixed(2)}
           </Text>
@@ -138,7 +139,7 @@ export const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: COLORS.background,
   },
   scrollContent: {
     paddingBottom: 110,
@@ -146,13 +147,13 @@ const styles = StyleSheet.create({
   imageCard: {
     width: '100%',
     height: height * 0.4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 10,
@@ -171,10 +172,10 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
     shadowRadius: 6,
@@ -191,35 +192,35 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   categoryBadge: {
-    backgroundColor: '#EDE9FE',
+    backgroundColor: COLORS.badgePurple,
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 12,
   },
   categoryText: {
-    color: '#5041BC',
-    fontSize: 11,
+    color: COLORS.primary,
+    fontSize: FONT_SIZE.sm,
     fontWeight: '700',
     letterSpacing: 0.6,
   },
   ratingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: COLORS.ratingBadgeBgLight,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 12,
   },
   ratingText: {
-    fontSize: 12,
+    fontSize: FONT_SIZE.md,
     fontWeight: '600',
-    color: '#B45309',
+    color: COLORS.ratingAmber,
     marginLeft: 4,
   },
   title: {
-    fontSize: 22,
+    fontSize: FONT_SIZE.title,
     fontWeight: '700',
-    color: '#1E202B',
+    color: COLORS.textPrimary,
     lineHeight: 28,
     marginBottom: 14,
   },
@@ -229,30 +230,30 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   priceLabel: {
-    fontSize: 14,
-    color: '#8A8FA3',
+    fontSize: FONT_SIZE.body,
+    color: COLORS.textSecondary,
     marginRight: 8,
     fontWeight: '500',
   },
   priceValue: {
-    fontSize: 26,
+    fontSize: FONT_SIZE.price,
     fontWeight: '800',
-    color: '#5041BC',
+    color: COLORS.primary,
   },
   divider: {
     height: 1,
-    backgroundColor: '#EAEAEE',
+    backgroundColor: COLORS.borderDivider,
     marginVertical: 14,
   },
   sectionHeader: {
-    fontSize: 16,
+    fontSize: FONT_SIZE.lg,
     fontWeight: '700',
-    color: '#1E202B',
+    color: COLORS.textPrimary,
     marginBottom: 8,
   },
   descriptionText: {
-    fontSize: 14,
-    color: '#6B7280',
+    fontSize: FONT_SIZE.body,
+    color: COLORS.textBody,
     lineHeight: 22,
     letterSpacing: 0.1,
   },
@@ -261,15 +262,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 14,
     paddingBottom: 28,
     borderTopWidth: 1,
-    borderTopColor: '#F0EFF5',
-    shadowColor: '#000',
+    borderTopColor: COLORS.border,
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
@@ -278,7 +279,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F9',
+    backgroundColor: COLORS.containerGray,
     borderRadius: 24,
     paddingHorizontal: 6,
     paddingVertical: 4,
@@ -288,35 +289,35 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
     shadowRadius: 2,
     elevation: 2,
   },
   quantityBtnDisabled: {
-    backgroundColor: '#F5F5F9',
+    backgroundColor: COLORS.containerGray,
     elevation: 0,
     shadowOpacity: 0,
   },
   quantityValue: {
-    fontSize: 15,
+    fontSize: FONT_SIZE.base,
     fontWeight: '700',
-    color: '#1E202B',
+    color: COLORS.textPrimary,
     paddingHorizontal: 12,
   },
   addToCartBtn: {
     flex: 1,
     height: 52,
-    backgroundColor: '#5041BC',
+    backgroundColor: COLORS.primary,
     borderRadius: 26,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#5041BC',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.28,
     shadowRadius: 8,
@@ -326,8 +327,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   addToCartText: {
-    color: '#FFFFFF',
-    fontSize: 15,
+    color: COLORS.white,
+    fontSize: FONT_SIZE.base,
     fontWeight: '600',
   },
 });
