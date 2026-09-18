@@ -7,7 +7,6 @@ import {
   StatusBar,
   BackHandler,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from './Onboarding.styles';
 import { SCREEN_NAME } from '../../constants/screenNames';
@@ -38,8 +37,7 @@ const Onboarding = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" />
+    <View style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.content}>
           {/* Card Image */}
@@ -72,7 +70,7 @@ const Onboarding = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

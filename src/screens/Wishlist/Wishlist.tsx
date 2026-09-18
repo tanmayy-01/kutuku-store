@@ -4,11 +4,9 @@ import {
   Text,
   FlatList,
   Image,
-  StatusBar,
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import {
   useAppDispatch,
@@ -88,9 +86,7 @@ const Wishlist = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-
+    <View style={styles.container}>
       {/* Header with Back Button and Clear All */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -145,7 +141,7 @@ const Wishlist = ({ navigation }: Props) => {
           columnWrapperStyle={styles.columnWrapper}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

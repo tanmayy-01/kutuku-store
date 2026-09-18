@@ -4,18 +4,17 @@ import {
   Text,
   FlatList,
   Image,
-  StatusBar,
   TouchableOpacity,
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Ionicons } from '@react-native-vector-icons/ionicons';
-import { getCartById } from '../../services/cartService';
 import { getProductById } from '../../services/productService';
-import { CartResponse, CartProduct, Product } from '../../types';
+import { CartProduct, Product } from '../../types';
 import { styles } from './Cart.styles';
 import { SCREEN_NAME } from '../../constants/screenNames';
+import { useCart } from '../../hooks/useCart';
 
 type Props = {
   navigation: any;
@@ -27,34 +26,27 @@ interface PopulatedCartItem {
 }
 
 const Cart = ({ navigation }: Props) => {
-  const [cart, setCart] = useState<CartResponse | null>(null);
+  const { data: cart, isLoading, isError, error } = useCart(1);
   const [cartItems, setCartItems] = useState<PopulatedCartItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCartDetails();
-  }, []);
+    if(cart?.products && cart.products.length > 0) fetchCartDetails();
+  }, [cart]);
 
   const fetchCartDetails = async () => {
     try {
-      setLoading(true);
-      setError(null);
 
-      const cartData = await getCartById(1);
-      console.log('Single Cart API Response:', cartData);
-      setCart(cartData);
-
-      // Fetch product details for each item in the cart
-      if (cartData?.products && cartData.products.length > 0) {
-        const itemPromises = cartData.products.map(async (item: CartProduct) => {
-          const prodId = item.productId || item.id || 1;
-          const productDetail = await getProductById(prodId);
-          return {
-            product: productDetail,
-            quantity: item.quantity || 1,
-          };
-        });
+      if (cart?.products && cart.products.length > 0) {
+        const itemPromises = cart.products.map(
+          async (item: CartProduct) => {
+            const prodId = item.productId || item.id || 1;
+            const productDetail = await getProductById(prodId);
+            return {
+              product: productDetail,
+              quantity: item.quantity || 1,
+            };
+          },
+        );
 
         const populatedItems = await Promise.all(itemPromises);
         setCartItems(populatedItems);
@@ -63,10 +55,7 @@ const Cart = ({ navigation }: Props) => {
       }
     } catch (err: any) {
       console.error('Failed to fetch cart:', err);
-      setError(err?.message || 'Unable to fetch cart details');
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const calculateTotal = (): number => {
@@ -79,7 +68,7 @@ const Cart = ({ navigation }: Props) => {
     Alert.alert(
       'Checkout',
       `Proceeding with total payment of $${calculateTotal().toFixed(2)}`,
-      [{ text: 'OK' }]
+      [{ text: 'OK' }],
     );
   };
 
@@ -122,10 +111,25 @@ const Cart = ({ navigation }: Props) => {
     );
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+  if (isLoading || cartItems.length == 0) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#5041BC" />
+        <Text style={styles.loadingText}>Loading cart from API...</Text>
+      </View>
+    );
+  }
 
+  if (isError) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text style={styles.errorText}>{error.message}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -146,23 +150,7 @@ const Cart = ({ navigation }: Props) => {
         )}
       </View>
 
-      {loading ? (
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#5041BC" />
-          <Text style={styles.loadingText}>Loading cart from API...</Text>
-        </View>
-      ) : error ? (
-        <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity
-            style={styles.retryButton}
-            activeOpacity={0.8}
-            onPress={fetchCartDetails}
-          >
-            <Text style={styles.retryButtonText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
-      ) : cartItems.length === 0 ? (
+      {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <View style={styles.emptyIconCircle}>
             <Ionicons name="cart-outline" size={44} color="#5041BC" />
@@ -184,7 +172,7 @@ const Cart = ({ navigation }: Props) => {
           <FlatList
             data={cartItems}
             renderItem={renderCartItem}
-            keyExtractor={(item) => item.product.id.toString()}
+            keyExtractor={item => item.product.id.toString()}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
           />
@@ -192,8 +180,12 @@ const Cart = ({ navigation }: Props) => {
           {/* Bottom Summary Bar */}
           <View style={styles.bottomSummaryBar}>
             <View style={styles.summaryRow}>
-              <Text style={styles.totalLabel}>Total ({cartItems.length} items)</Text>
-              <Text style={styles.totalPrice}>${calculateTotal().toFixed(2)}</Text>
+              <Text style={styles.totalLabel}>
+                Total ({cartItems.length} items)
+              </Text>
+              <Text style={styles.totalPrice}>
+                ${calculateTotal().toFixed(2)}
+              </Text>
             </View>
 
             <TouchableOpacity
@@ -206,7 +198,7 @@ const Cart = ({ navigation }: Props) => {
           </View>
         </>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
