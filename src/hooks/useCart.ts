@@ -3,7 +3,8 @@ import { getCartById } from '../services';
 
 export const useCart = (id: number) =>
   useQuery({
-    queryKey: ['carts'],
+    queryKey: ['cart', id],
     queryFn: () => getCartById(id),
     staleTime: 5 * 60 * 1000,
+    enabled: Boolean(id),
   });

@@ -3,7 +3,8 @@ import { getProductById } from '../services';
 
 export const useSingleProduct = (id: number) =>
   useQuery({
-    queryKey: ['single_product'],
+    queryKey: ['products', id],
     queryFn: () => getProductById(id),
     staleTime: 5 * 60 * 1000,
+    enabled: Boolean(id),
   });
